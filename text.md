@@ -33,7 +33,7 @@ HTML（HyperText Markup Language）とは、Webページを作成するための
   この二つがHTMLの大きな役割です。
 
 ## HTML 記入例
-`
+```
 <!DOCTYPE html>
   <html>
     <head>
@@ -55,7 +55,7 @@ HTML（HyperText Markup Language）とは、Webページを作成するための
       </main>
     </body>
   </html>
-`
+```
 このコードでは
   - <h1>タグで「社内ポータル」という見出しを作成
   - <p>タグで段落を作成
@@ -91,12 +91,12 @@ CSS (Cascading Style Sheets) とは、Webページの見た目をデザインす
   異なるデバイス（パソコン、スマートフォン、タブレットなど）に合わせて、レイアウトを自動的に調整することができます。
 
 ## CSS記入例
-`
+```
   h1 {
     color: blue;
     font-size: 32px;
   }
-`
+```
 ※このコードは、全ての<h1>タグの文字色を青色に、フォントサイズを32pxに変更します。
 
 ## まとめ
