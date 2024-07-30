@@ -101,3 +101,112 @@ CSS (Cascading Style Sheets) とは、Webページの見た目をデザインす
 
 ## まとめ
 CSSは、HTMLで記述された文書構造にスタイルを付与し、表現豊かなWebページを実現するスタイルシート言語です。 セレクタ、プロパティ、値といった要素を組み合わせることで、高度なデザインやレイアウトを構築できます。
+
+
+## Javascriptとは
+  JavaScript（ジャバスクリプト）は、Webページに動きやインタラクティブな機能を追加するためのプログラミング言語。静的なHTMLだけでは表現できない、動的な要素をウェブサイトに実装することができる。
+
+  ※インタラクティブ
+  　「相互に作用し合う」という意味で、ボタンをクリックしたらポップアップを表示したり、
+    画像がスライドしたり、検索結果をリアルタイムで表示するなど。
+
+## Javascriptの役割
+
+### 動的なWebページの作成
+　　ボタンをクリックしたときの反応、マウスを合わせたときの変化など、ユーザーの操作に対して様々な動き　　例）ドロップダウンメニューやタブ切り替えなど。
+ 　 入力フォームで内容が正しいか、必要な情報がすべて入力されているかのバリデーションチェック。
+
+### WEBサーバーの構築
+　　サーバー側でのアプリケーションのロジックからデータベースとの連携、ファイルの読み書き、外部サービ　　スとの連携など、様々なデータ処理を行うことができます。
+
+```
+"use server";
+import { auth } from "@/auth";
+import { db } from "@/lib/firebase/server";
+import {
+  CreateMeasureStudent,
+  CreateMeasureStudentSchema,
+  validateWithZodSchema,
+} from "@/utils/schemas";
+import { School } from "@/utils/school.interface";
+import { FieldValue } from "firebase-admin/firestore";
+
+export async function createMeasureStudent(
+  data: CreateMeasureStudent,
+  { schoolId, studentId }: { schoolId: string; studentId: string }
+): Promise<{ status: string; message: string }> {
+  const session = await auth();
+
+  try {
+    const result = validateWithZodSchema(CreateMeasureStudentSchema, data);
+
+    if (!session) {
+      throw new Error("認証に失敗しました");
+    }
+
+    const snapshot = db
+      .collection("schools")
+      .doc(schoolId)
+      .collection("students")
+      .doc(studentId);
+
+    const school = (
+      await db.collection("schools").doc(schoolId).get()
+    ).data() as School;
+    const shippingFee = school.isShipping ? school.shippingFee : 0;
+
+    const totalAmount = result.products.reduce((sum, product) => {
+      const productPrice = product.price * product.quantity;
+      const inseamPrice = product.inseam.price * product.quantity;
+      sum = sum + productPrice + inseamPrice;
+      return sum;
+    }, 0);
+
+    await snapshot.update({
+      products: result.products,
+      finishedAt: FieldValue.serverTimestamp(),
+      totalAmount: totalAmount + shippingFee,
+    });
+
+    return {
+      status: "success",
+      message: "登録に成功しました",
+    };
+  } catch (e: unknown) {
+    return {
+      status: "error",
+      message: e instanceof Error ? e.message : "登録に失敗しました",
+    };
+  }
+}
+```　　
+## JavascriptのWEB以外の活用
+
+  - ゲーム開発
+  - 機械学習
+  - Iot
+  etc.
+
+### まとめ
+　　JavaScriptは、Web開発において欠かせない存在であり、その他の分野でも成長していて、その重要性はま　　すます高まっていく。JavaScriptを使うことによって、より動的で魅力的なWebサイトやWebアプリケーシ　　ョンを開発することができる。
+
+## 総括
+　　HTML、CSS、Javascriptを学ぶことによって、動的なWEBサイトを構築することが可能ですが、
+    正直、この3つを学んだだけではWEBアプリケーションを作ることは難しい。
+    その他に覚えることはたくさんあります。
+
+    - データベース　（firestore, MySql, postgreSQL）
+    - 他のプログラミング言語 (Typescript)
+    - ストレージ　(cloud storage)
+    - 認証サービス(firebase auth)
+    - WEBフレームワーク　(react, nextjs,)
+    - css フレームワーク　(tailwind css, shadcn ui, chakura ui, mantain ui)
+    - インフラ , ホスティングサービス(aws, gcp ,vercel )
+    - バージョン管理　(git, github)
+    - 決済サービス (stripe)
+    - コンテナ (Docker)
+    - モジュールバンドラー(webpack, vite, Turbopack )
+    - その他　複数のライブラリ
+
+    ただし、HTML、CSS、Javascriptの3つを覚えることによって、アプリ開発のスタート地点には立てるので、興味があればぜひ学んでみてください。
+　
