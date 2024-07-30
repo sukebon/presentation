@@ -178,7 +178,9 @@ export async function createMeasureStudent(
     };
   }
 }
-```　　
+```
+```
+```
 
 ## JavascriptのWEB以外の活用
 
