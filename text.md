@@ -120,7 +120,6 @@ CSSは、HTMLで記述された文書構造にスタイルを付与し、表現�
 　　サーバー側でのアプリケーションのロジックからデータベースとの連携、ファイルの読み書き、外部サービ　　スとの連携など、様々なデータ処理を行うことができます。
 
 ```
-"use server";
 import { auth } from "@/auth";
 import { db } from "@/lib/firebase/server";
 import {
@@ -180,6 +179,7 @@ export async function createMeasureStudent(
   }
 }
 ```　　
+
 ## JavascriptのWEB以外の活用
 
   - ゲーム開発
